@@ -38,11 +38,34 @@ def condense(x):
     return new
 
 r = 1
-for i in range(4, 2000001, 6): #change second parameter to add more columns
+for i in range(4, 2000001, 6): #(X)change second parameter to add more rows
     p = condense(i)
     wks1.cell(row=r, column=1).value = i
     wks1.cell(row=r, column=2).value = p
     wks1.cell(row=r, column=3).value = len(p)
+    r += 1
+
+r = 1
+for i in range(4, 2000001, 6): #(Y)change second parameter to add more rows, must have Y <= X
+    p = modDict[i]
+    last = 4
+    mod = 6
+    path = ""
+    while len(path) < len(p):
+        mod *= 4
+        new = i % mod
+        if new == last:
+            path += "1"
+        elif new == last + (mod/4):
+            path += "2"
+        elif new == last + (mod/2):
+            path += "3"
+        elif new == last + (3*mod/4):
+            path += "4"
+        else:
+            print("error")
+        last = new
+    wks1.cell(row=r, column=4).value = path
     r += 1
 
 def genNewList(old, increment):
@@ -54,7 +77,7 @@ def genNewList(old, increment):
         result.append(i + 3 * increment)
     return result
 
-colsToDo = 9 #change to generate more columns
+colsToDo = 4 #(Z)change to generate more columns, must have 4^Z <= X
 modLists = []
 modLists.append([4,10,16,22])
 for i in range(1, colsToDo):
